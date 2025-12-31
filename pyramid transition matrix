@@ -1,0 +1,20 @@
+class Solution:
+    def pyramidTransition(self, b, A):
+        m={}
+        for x,y,z in A:
+            m.setdefault(x+y,[]).append(z)
+
+        def dfs(s):
+            if len(s)==1: return True
+            for i in range(len(s)-1):
+                if s[i:i+2] not in m: return False
+
+            def gen(i, t):
+                if i==len(s)-1: return dfs(t)
+                for c in m[s[i:i+2]]:
+                    if gen(i+1, t+c): return True
+                return False
+
+            return gen(0,"")
+
+        return dfs(b)
