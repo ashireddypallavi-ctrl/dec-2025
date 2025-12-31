@@ -1,0 +1,27 @@
+class Solution:
+    def latestDayToCross(self, r, c, cells):
+        def ok(d):
+            g = [[0]*c for _ in range(r)]
+            for i in range(d):
+                x,y=cells[i]
+                g[x-1][y-1]=1
+
+            q=deque([(0,j) for j in range(c) if g[0][j]==0])
+            for x,y in q: g[x][y]=1
+
+            while q:
+                x,y=q.popleft()
+                if x==r-1: return True
+                for dx,dy in ((1,0),(-1,0),(0,1),(0,-1)):
+                    nx,ny=x+dx,y+dy
+                    if 0<=nx<r and 0<=ny<c and g[nx][ny]==0:
+                        g[nx][ny]=1
+                        q.append((nx,ny))
+            return False
+
+        l,h=1,len(cells)
+        while l<=h:
+            m=(l+h)//2
+            if ok(m): l=m+1
+            else: h=m-1
+        return h
